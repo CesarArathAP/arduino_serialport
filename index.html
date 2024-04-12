@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serial Monitor</title>
+</head>
+<body>
+    <h1>Serial Monitor</h1>
+    <div id="serial-data">
+        Cargando...
+    </div>  
+    <script>
+        async function fetchData() {
+            const response = await fetch('/datos_serial');
+            const data = await response.json();
+            const serialDataElement = document.getElementById('serial-data');
+            serialDataElement.textContent = data.datos[data.datos.length - 1]; // Mostrar solo el último dato
+        }
+
+        fetchData();
+        setInterval(fetchData, 1000); // Actualizar cada segundo
+    </script>
+</body>
+</html>
