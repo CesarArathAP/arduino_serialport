@@ -1,5 +1,6 @@
-from fastapi import FastAPI, BackgroundTasks
-from starlette.responses import FileResponse
+from fastapi import FastAPI, BackgroundTasks, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import serial
 import time
@@ -30,6 +31,20 @@ def leer_puerto_serial():
 thread = threading.Thread(target=leer_puerto_serial)
 thread.start()
 
+# Configuración de CORS
+origins = [
+    "http://localhost",
+    "http://localhost:3000",  # Agrega aquí la URL de tu aplicación React Native
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
+
 # Ruta para obtener los datos del puerto serial
 @app.get("/datos_serial")
 async def datos_serial():
@@ -43,4 +58,4 @@ async def root():
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
